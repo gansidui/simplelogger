@@ -6,7 +6,7 @@ import (
 )
 
 // TODO 目前是单个日志文件满了后直接清空，后续支持多文件
-type SimpleLogger struct {
+type Logger struct {
 	MaxSize int64 // 单个日志文件的大小限制，单位：MB
 
 	filename string
@@ -15,14 +15,14 @@ type SimpleLogger struct {
 	mutex    sync.Mutex
 }
 
-func (l *SimpleLogger) Open(filename string) error {
+func (l *Logger) Open(filename string) error {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 
 	return l.open(filename)
 }
 
-func (l *SimpleLogger) open(filename string) error {
+func (l *Logger) open(filename string) error {
 	file, err := os.OpenFile(filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		return err
@@ -40,7 +40,7 @@ func (l *SimpleLogger) open(filename string) error {
 	return nil
 }
 
-func (l *SimpleLogger) Close() error {
+func (l *Logger) Close() error {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 
@@ -54,7 +54,7 @@ func (l *SimpleLogger) Close() error {
 	return err
 }
 
-func (l *SimpleLogger) Write(p []byte) (int, error) {
+func (l *Logger) Write(p []byte) (int, error) {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 

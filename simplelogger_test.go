@@ -9,7 +9,7 @@ import (
 func TestBasic(t *testing.T) {
 	logfile := "./log_test.txt"
 
-	logger := &SimpleLogger{MaxSize: 100}
+	logger := &Logger{MaxSize: 100}
 	if err := logger.Open(logfile); err != nil {
 		t.Fatal(err)
 	}
